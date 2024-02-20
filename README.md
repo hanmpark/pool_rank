@@ -2,36 +2,41 @@
 
 This script is designed to fetch and display the levels of students from a specific piscine cohort at any 42 School campus using the 42 API. It filters users based on the specified pool month and year, retrieves detailed user information, extracts the level in their C Piscine Cursus of each student and rank them by their level.
 
+> [!IMPORTANT]
+> The script comes with no guarantees for applicability to all contexts. It might require customization to function correctly in your specific environment.
+
 ## Features
 
-- Fetches users based on a specified pool month and year.
-- Retrieves detailed information for each user, focusing on their level in their C Piscine Cursus.
-- Outputs the username and corresponding level.
+- **User Filtering**: Targets users based on the piscine's designated month and year.
+- **Detailed Information Retrieval**: Compiles extensive user data, emphasizing the C Piscine Cursus level.
+- **Ranking System**: Assesses and ranks students according to their performance level.
 
 ## Prerequisites
 
-- `jq`: A lightweight and flexible command-line JSON processor.
+- `jq`: A versatile and lightweight command-line tool for processing JSON data.
 - `curl`: A command-line tool for getting or sending data using URL syntax.
 
 Make sure both tools are installed on your system. You can install them using your system's package manager.
 
-## Setup
+## Setup Instructions
 
-1. Clone the repository to your local machine.
-2. Ensure you have a valid UID and SECRET to get the access token. This token is required for making authenticated requests to the 42 API.
-3. Set up variables in .env file.
+1. Clone the repository to your machine.
+2. Ensure you have a valid UID and SECRET for accessing the 42 API token, necessary for authenticated requests.
+3. Configure the `.env` file with the necessary variables.
 
-## Usage
+## Configuration
 
-Before running the script, make sure to set the following variables in the .env file:
+Set the following environment variables in your .env file to prepare the script for execution:
 ```shell
-# NECESSARY VARIABLES
+# Essential VARIABLES
 UID_42="YOUR_UID_42"
 SECRET_42="YOUR_SECRET_42"
-CAMPUS_ID="" # execute ./campus_id.sh if you don't know
-POOL_MONTH=""
-POOL_YEAR=""
+CAMPUS_ID="" # Run ./campus_id.sh if you don't know
+POOL_MONTH="" # Format eg: "february"
+POOL_YEAR="" # Foramt: "yyyy"
 ```
+
+## Execution
 
 To run the script, use the following command:
 ```bash
