@@ -28,12 +28,12 @@ Make sure both tools are installed on your system. You can install them using yo
 
 Set the following environment variables in your .env file to prepare the script for execution:
 ```shell
-# Essential VARIABLES
+# ESSENTIAL VARIABLES
 UID_42="YOUR_UID_42"
 SECRET_42="YOUR_SECRET_42"
-CAMPUS_ID="" # Run ./campus_id.sh if you don't know
+CAMPUS_ID="" # execute ./campus_id YOUR_CAMPUS_CITY if you don't know your campus id
 POOL_MONTH="" # Format eg: "february"
-POOL_YEAR="" # Foramt: "yyyy"
+POOL_YEAR="" # Format: "yyyy"
 ```
 
 ## Execution
