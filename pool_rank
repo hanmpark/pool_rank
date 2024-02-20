@@ -15,6 +15,22 @@ ______   ____   ____ |  |   ____________    ____ |  | __
 $DEF
 "
 
+# ---------------------------------------- Obtain an access token ---------------------------------------- #
+RESPONSE=$(curl -s --request POST \
+	--url "https://api.intra.42.fr/oauth/token" \
+	--header "content-type: application/json" \
+	--data "{
+		\"grant_type\": \"client_credentials\",
+		\"client_id\": \"$UID_42\",
+		\"client_secret\": \"$SECRET_42\"
+	}")
+if [[ "$RESPONSE" == *"error"* ]]; then
+	printf "${BOLD}${RED}Error: Failed to obtain access token (check UID and SECRET)\n${DEF}"
+	exit 1
+fi
+
+ACCESS_TOKEN=$(echo $RESPONSE | jq -r '.access_token')
+
 # ------------------------------------ Check if the variables are set ------------------------------------ #
 if [ -z "$ACCESS_TOKEN" ]; then
 	printf $BOLD$RED"Error: Failed to obtain access token (check UID and SECRET)\n"$DEF
