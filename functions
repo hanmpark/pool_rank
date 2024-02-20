@@ -1,0 +1,88 @@
+#!/bin/bash
+
+source .env
+
+# ------------------------------------------ Get the users data ------------------------------------------ #
+fetch_users_by_pool() {
+	local P_MONTH=$1
+	local P_YEAR=$2
+	local PAGE=1
+	local ALL_PAGE_USERS='[]'
+
+	while : ; do
+		# Fetch a page of users
+		local PAGE_USERS=$(curl -g -s -H "Authorization: Bearer $ACCESS_TOKEN" \
+			"https://api.intra.42.fr/v2/campus/$CAMPUS_ID/users?&filter[pool_month]=$P_MONTH&filter[pool_year]=$P_YEAR&page[number]=$PAGE&page[size]=100")
+		((PAGE++))
+
+		# Because 42 API application has a secondly rate limit set at 2 :((((
+		if ((PAGE % 2 == 0)); then
+			sleep 1
+		fi
+
+		# Break if the page is empty
+		if [ "$(echo "$PAGE_USERS" | jq '. | length')" -eq 0 ]; then
+			break
+		fi
+
+		# Append PAGE_USERS to ALL_PAGE_USERS
+		ALL_PAGE_USERS=$(echo "$ALL_PAGE_USERS" "$PAGE_USERS" | jq -s 'add')
+	done
+
+	if [ "$ALL_PAGE_USERS" == "[]" ]; then
+		return 1
+	fi
+
+	echo "$ALL_PAGE_USERS"
+}
+
+# ------------------------------- Get the login and the corresponding level ------------------------------ #
+fetch_users_data() {
+	local ALL_PAGE_USERS=$1
+	local TOTAL_API_CALL=$(echo "$ALL_PAGE_USERS" | jq -r '.[] | .login' | wc -l)
+	local ALL_USERS=$(echo "$ALL_PAGE_USERS" | jq -r '.[] | .login')
+	local NB_API_CALL=0
+
+	echo "$ALL_USERS" | while read -r LOGIN; do
+		USER_DATA=$(curl -g -s -H "Authorization: Bearer $ACCESS_TOKEN" "https://api.intra.42.fr/v2/users/$LOGIN")
+		if [ -z "$USER_DATA" ]; then
+			return 1
+		fi
+
+		if ((NB_API_CALL % 2 == 0)); then
+			show_progress_bar "$NB_API_CALL" "$TOTAL_API_CALL"
+			sleep 1
+		fi
+		((NB_API_CALL++))
+
+		USER_LEVEL=$(echo "$USER_DATA" | jq '.cursus_users[] | select(.cursus_id == 9) | .level')
+		if [ -n "$USER_LEVEL" ]; then
+			printf "%s: %.2f\n" "$LOGIN" "$USER_LEVEL" >> users
+		else
+			printf "%s: %.2f\n" "$LOGIN" 0 >> users
+		fi
+	done
+	show_progress_bar 1 1
+}
+
+# ------------------------------------------ Simple progress bar ----------------------------------------- #
+show_progress_bar() {
+	local NB_API_CALL=$1
+	local TOTAL_API_CALL=$2
+
+	# Percentage of progress
+	local progress=$((100 * $NB_API_CALL / $TOTAL_API_CALL))
+	local signs=$((progress / 5))
+	local sec=$(($TOTAL_API_CALL - $NB_API_CALL))
+
+	local bar=""
+	for ((i = 0; i < signs; i++)); do
+		bar="${bar}="
+	done
+
+	for ((i = signs; i < 20; i++)); do
+		bar="${bar} "
+	done
+
+	printf "\rFetching data: [%-20s] %3d%% (estimated: %ds)" "$bar" "$progress" "$sec"
+}
