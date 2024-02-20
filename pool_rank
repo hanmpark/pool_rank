@@ -58,11 +58,9 @@ else
 		case $REFRESH in
 			[Yy]*)
 				REFRESH=1
-				echo ""
 				break;;
 			[Nn]*)
 				REFRESH=0
-				echo ""
 				break;;
 			*)
 				echo "Please answer yes (y) or no (n)."
@@ -83,12 +81,12 @@ if [ "$REFRESH" -eq 1 ]; then
 		printf $BOLD$RED"Error: Failed to fetch students' data\n"$DEF
 		exit 1
 	fi
-	echo "Last updated: $(date +%Y/%m/%d-%H:%M:%S)" >> users
-	printf "\n\n"
+	echo "Last updated date: $(date +%Y/%m/%d-%H:%M:%S)" >> users
+	printf "\n"
 fi
 
 # --------------------------------------------- PRINT RANKS ---------------------------------------------- #
-read -p "Check login: " LOGIN
+read -p "Check login (can be blank): " LOGIN
 echo ""
 printf "${BOLD}${RED}RANK  LOGIN      LVL\n${DEF}"
 # Read from the file, sort in reverse by the second field (level), and format the output

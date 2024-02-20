@@ -84,5 +84,5 @@ show_progress_bar() {
 		bar="${bar} "
 	done
 
-	printf "\rFetching data: [%-20s] %3d%% (estimated: %ds)" "$bar" "$progress" "$sec"
+	printf "\rFetching data: [%-20s] %3d%% (estimated: %ds)  " "$bar" "$progress" "$sec"
 }
