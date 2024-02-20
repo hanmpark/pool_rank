@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source .env
+source settings
 source functions
 
 clear
@@ -30,12 +30,13 @@ if [[ "$RESPONSE" == *"error"* ]]; then
 fi
 
 ACCESS_TOKEN=$(echo $RESPONSE | jq -r '.access_token')
-
-# ------------------------------------ Check if the variables are set ------------------------------------ #
 if [ -z "$ACCESS_TOKEN" ]; then
 	printf $BOLD$RED"Error: Failed to obtain access token (check UID and SECRET)\n"$DEF
 	exit 1
-elif [ -z "$CAMPUS_ID" ]; then
+fi
+
+# ------------------------------------ Check if the variables are set ------------------------------------ #
+if [ -z "$CAMPUS_ID" ]; then
 	printf $BOLD$RED"Error: Please set an existing campus ID (you can use campus_id.sh)\n"$DEF
 	exit 1
 elif [ -z "$POOL_MONTH" ]; then

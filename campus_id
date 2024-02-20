@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source .env
+source settings
 
 # ---------------------------------------- Obtain an access token ---------------------------------------- #
 RESPONSE=$(curl -s --request POST \
@@ -17,6 +17,10 @@ if [[ "$RESPONSE" == *"error"* ]]; then
 fi
 
 ACCESS_TOKEN=$(echo $RESPONSE | jq -r '.access_token')
+if [ -z "$ACCESS_TOKEN" ]; then
+	printf $BOLD$RED"Error: Failed to obtain access token (check UID and SECRET)\n"$DEF
+	exit 1
+fi
 
 CAMPUS_JSON=$(curl -s -H "Authorization: Bearer $ACCESS_TOKEN" "https://api.intra.42.fr/v2/campus")
 if [ -z "$1" ]; then

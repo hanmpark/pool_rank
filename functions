@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source .env
+source settings
 
 # ------------------------------------------ Get the users data ------------------------------------------ #
 fetch_users_by_pool() {
