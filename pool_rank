@@ -31,29 +31,32 @@ fi
 
 ACCESS_TOKEN=$(echo $RESPONSE | jq -r '.access_token')
 if [ -z "$ACCESS_TOKEN" ]; then
-	printf $BOLD$RED"Error: Failed to obtain access token (check UID and SECRET)\n"$DEF
+	printf "${BOLD}${RED}Error: Failed to obtain access token (check UID and SECRET)\n${DEF}"
 	exit 1
 fi
 
 # ------------------------------------ Check if the variables are set ------------------------------------ #
 if [ -z "$CAMPUS_ID" ]; then
-	printf $BOLD$RED"Error: Please set an existing campus ID (you can use campus_id.sh)\n"$DEF
+	printf "${BOLD}${RED}Error: Please set an existing campus ID (you can use campus_id.sh)\n${DEF}"
 	exit 1
 elif [ -z "$POOL_MONTH" ]; then
-	printf $BOLD$RED"Error: Please set a pool month\n"$DEF
+	printf "${BOLD}${RED}Error: Please set a pool month\n${DEF}"
 	exit 1
 elif [ -z "$POOL_YEAR" ]; then
-	printf $BOLD$RED"Error: Please set a pool year\n"$DEF
+	printf "${BOLD}${RED}Error: Please set a pool year\n${DEF}"
+	exit 1
+elif [ -z "$PR_PATH" ]; then
+	printf "${BOLD}${RED}Error: Please set the pool_rank path\n${DEF}"
 	exit 1
 fi
 
 printf "\n${BOLD}Pool month:${DEF} $POOL_MONTH\n${BOLD}Pool year:${DEF} $POOL_YEAR\n\n"
 
 # --------------------------------------- Refresh the ranks or not --------------------------------------- #
-if [ ! -e "./users" ] || [ ! -s "./users" ]; then
+if [ ! -e "$PR_PATH/users" ] || [ ! -s "$PR_PATH/users" ]; then
 	REFRESH=1
 else
-	printf "${BOLD}${GRAY}$(tail -n 1 users)\n\n${DEF}"
+	printf "${BOLD}${GRAY}$(tail -n 1 $PR_PATH/users)\n\n${DEF}"
 	while : ; do
 		printf "${GRAY}"
 		read -p "Do you want to refresh ? (Y/n): " REFRESH
@@ -73,7 +76,7 @@ else
 fi
 
 if [ "$REFRESH" -eq 1 ]; then
-	echo -n "" > users
+	touch "$PR_PATH/users"
 	ALL_PAGE_USERS=$(fetch_users_by_pool "$POOL_MONTH" "$POOL_YEAR")
 	if [ $? -ne 0 ]; then
 		printf "${BOLD}${RED}Error: No students found for the specified pool month/year.\n${DEF}"
@@ -84,7 +87,7 @@ if [ "$REFRESH" -eq 1 ]; then
 		printf "${BOLD}${RED}Error: Failed to fetch students' data\n${DEF}"
 		exit 1
 	fi
-	echo "Last updated date: $(date +%Y/%m/%d-%H:%M:%S)" >> users
+	echo "Last updated date: $(date +%Y/%m/%d-%H:%M:%S)" >> $PR_PATH/users
 	printf "\n"
 fi
 
@@ -95,7 +98,7 @@ printf "${DEF}\n"
 printf "${BOLD}${RED}RANK  LOGIN      LVL\n${DEF}"
 
 # Read from the file, sort in reverse by the second field (level), and format the output
-RANK_USERS=$(sed '$d' users | sort -t: -k2 -nr)
+RANK_USERS=$(sed '$d' $PR_PATH/users | sort -t: -k2 -nr)
 echo "$RANK_USERS" | awk -F": " -v bold="$BOLD" -v def="$DEF" -v green="$GREEN" -v yellow="$YELLOW" \
 	-v gray="$GRAY" -v login="$LOGIN"\
 	'BEGIN {rank=1} {

@@ -57,9 +57,9 @@ fetch_users_data() {
 
 		USER_LEVEL=$(echo "$USER_DATA" | jq '.cursus_users[] | select(.cursus_id == 9) | .level')
 		if [ -n "$USER_LEVEL" ]; then
-			printf "%s: %.2f\n" "$LOGIN" "$USER_LEVEL" >> users
+			printf "%s: %.2f\n" "$LOGIN" "$USER_LEVEL" >> $PR_PATH/users
 		else
-			printf "%s: %.2f\n" "$LOGIN" 0 >> users
+			printf "%s: %.2f\n" "$LOGIN" 0 >> $PR_PATH/users
 		fi
 	done
 	show_progress_bar 1 1
