@@ -26,7 +26,7 @@ Make sure both tools are installed on your system. You can install them using yo
 
 ## Configuration
 
-Set the following environment variables in your .env file to prepare the script for execution:
+Set the following environment variables in your `settings` file to prepare the script for execution:
 ```shell
 # ESSENTIAL VARIABLES
 UID_42="YOUR_UID_42"
