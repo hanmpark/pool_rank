@@ -55,7 +55,9 @@ if [ ! -e "./users" ] || [ ! -s "./users" ]; then
 else
 	printf "${BOLD}${GRAY}$(tail -n 1 users)\n\n${DEF}"
 	while : ; do
+		printf "${GRAY}"
 		read -p "Do you want to refresh ? (Y/n): " REFRESH
+		printf "${DEF}"
 		case $REFRESH in
 			[Yy]*)
 				REFRESH=1
@@ -74,12 +76,12 @@ if [ "$REFRESH" -eq 1 ]; then
 	echo -n "" > users
 	ALL_PAGE_USERS=$(fetch_users_by_pool "$POOL_MONTH" "$POOL_YEAR")
 	if [ $? -ne 0 ]; then
-		printf $BOLD$RED"Error: No students found for the specified pool month/year.\n"$DEF
+		printf "${BOLD}${RED}Error: No students found for the specified pool month/year.\n${DEF}"
 		exit 1
 	fi
 	fetch_users_data "$ALL_PAGE_USERS"
 	if [ $? -ne 0 ]; then
-		printf $BOLD$RED"Error: Failed to fetch students' data\n"$DEF
+		printf "${BOLD}${RED}Error: Failed to fetch students' data\n${DEF}"
 		exit 1
 	fi
 	echo "Last updated date: $(date +%Y/%m/%d-%H:%M:%S)" >> users
@@ -87,11 +89,13 @@ if [ "$REFRESH" -eq 1 ]; then
 fi
 
 # --------------------------------------------- PRINT RANKS ---------------------------------------------- #
-read -p "Check login (can be blank): " LOGIN
-echo ""
+printf "${GRAY}"
+read -p "Choose login to highlight (can be blank): " LOGIN
+printf "${DEF}\n"
 printf "${BOLD}${RED}RANK  LOGIN      LVL\n${DEF}"
+
 # Read from the file, sort in reverse by the second field (level), and format the output
-RANK_USERS=$(head -n -2 users | sort -t: -k2 -nr)
+RANK_USERS=$(sed '$d' users | sort -t: -k2 -nr)
 echo "$RANK_USERS" | awk -F": " -v bold="$BOLD" -v def="$DEF" -v green="$GREEN" -v yellow="$YELLOW" \
 	-v gray="$GRAY" -v login="$LOGIN"\
 	'BEGIN {rank=1} {

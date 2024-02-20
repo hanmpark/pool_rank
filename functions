@@ -63,6 +63,7 @@ fetch_users_data() {
 		fi
 	done
 	show_progress_bar 1 1
+	printf "\n"
 }
 
 # ------------------------------------------ Simple progress bar ----------------------------------------- #
@@ -71,18 +72,20 @@ show_progress_bar() {
 	local TOTAL_API_CALL=$2
 
 	# Percentage of progress
-	local progress=$((100 * $NB_API_CALL / $TOTAL_API_CALL))
-	local signs=$((progress / 5))
-	local sec=$(($TOTAL_API_CALL - $NB_API_CALL))
+	local PROGRESS=$((100 * $NB_API_CALL / $TOTAL_API_CALL))
+	local COMPLETED=$((PROGRESS / 5))
+	local SEC=$((TOTAL_API_CALL - NB_API_CALL))
 
-	local bar=""
-	for ((i = 0; i < signs; i++)); do
-		bar="${bar}="
+	local FILL="■"
+	local UNFILL="-"
+
+	local BAR=""
+	for ((i = 0; i < COMPLETED; i++)); do
+		BAR="${BAR}${FILL}"
+	done
+	for ((i = COMPLETED; i < 20; i++)); do
+		BAR="${BAR}${UNFILL}"
 	done
 
-	for ((i = signs; i < 20; i++)); do
-		bar="${bar} "
-	done
-
-	printf "\rFetching data: [%-20s] %3d%% (estimated: %ds)  " "$bar" "$progress" "$sec"
+	printf "\r${GREEN}Fetching data:${DEF} [${YELLOW}%-20s${DEF}] ${RED}%3d%%${DEF} (estimated: %ds)  " "$BAR" "$PROGRESS" "$SEC"
 }
