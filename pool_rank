@@ -76,7 +76,7 @@ else
 fi
 
 if [ "$REFRESH" -eq 1 ]; then
-	touch "$PR_PATH/users"
+	echo -n "" > $PR_PATH/users
 	ALL_PAGE_USERS=$(fetch_users_by_pool "$POOL_MONTH" "$POOL_YEAR")
 	if [ $? -ne 0 ]; then
 		printf "${BOLD}${RED}Error: No students found for the specified pool month/year.\n${DEF}"
