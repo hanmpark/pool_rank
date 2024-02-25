@@ -22,7 +22,7 @@ Make sure both tools are installed on your system. You can install them using yo
 
 1. Clone the repository to your machine.
 2. Ensure you have a valid UID and SECRET for accessing the 42 API token, necessary for authenticated requests.
-3. Configure the `.env` file with the necessary variables.
+3. Configure the `settings` file with the necessary variables.
 
 ## Configuration
 
@@ -34,7 +34,7 @@ SECRET_42="" # your application's SECRET
 CAMPUS_ID="" # execute ./campus_id YOUR_CAMPUS_CITY if you don't know your campus id
 POOL_MONTH="" # Format eg: "february"
 POOL_YEAR="" # Format: "yyyy"
-PR_PATH="" # pwd of the respository
+PR_PATH="" # for storing a "users" file listing found users in the project directory
 ```
 
 ## Execution
