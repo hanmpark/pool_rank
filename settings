@@ -6,7 +6,7 @@ SECRET_42="" # your application's SECRET
 CAMPUS_ID="" # execute ./campus_id YOUR_CAMPUS_CITY if you don't know your campus id
 POOL_MONTH="" # Format eg: "february"
 POOL_YEAR="" # Format: "yyyy"
-PR_PATH="" # pwd of the respository
+PR_PATH="" # for storing a "users" file listing found users in the project directory
 
 # COLORS FOR DISPLAY
 RED="\033[38;5;124m"
