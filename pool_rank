@@ -1,6 +1,5 @@
 #!/bin/bash
-
-if ! [[ $(test -f "settings") ]]; then
+if ! test -f settings; then
     echo "Settings are not set. Starting ./init"
     source init
 fi
