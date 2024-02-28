@@ -50,18 +50,21 @@ fi
 
 
 # ---------------------------------------- Get Basic User Info ---------------------------------------- #
-printf "${GRAY}Type your login to fetch campus information:${DEF} "
-read -p "" LOGIN
+while : ; do
+	printf "${GRAY}Type your login to fetch campus information:${DEF} "
+	read -p "" LOGIN
+	USER_DATA=$(curl -g -s -H "Authorization: Bearer $ACCESS_TOKEN" "https://api.intra.42.fr/v2/users/$LOGIN")
+	if [[ "$USER_DATA" == "{}" ]]; then
+		printf "${RED}Couldn't find user in 42 Database$DEF\n"
+	else
+		break;
+	fi
+done
 printf "\n"
-
 PR_PATH=$(pwd)
-
-USER_DATA=$(curl -g -s -H "Authorization: Bearer $ACCESS_TOKEN" "https://api.intra.42.fr/v2/users/$LOGIN")
-
-echo $USER_DATA | jq > user_info
-POOL_YEAR=$(cat user_info | jq ".pool_year")
-POOL_MONTH=$(cat user_info | jq ".pool_month")
-CAMPUS_ID=$(cat user_info | jq ".campus[].id")
+POOL_YEAR=$(echo $USER_DATA | jq ".pool_year")
+POOL_MONTH=$(echo $USER_DATA  | jq ".pool_month")
+CAMPUS_ID=$(echo $USER_DATA | jq ".campus[].id")
 
 printf "
 # VARIABLES
@@ -74,5 +77,3 @@ POOL_MONTH=$POOL_MONTH
 PR_PATH=\"$PR_PATH\"
 LOGIN=\"$LOGIN\"
 " > settings
-
-rm user_info
