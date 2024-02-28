@@ -1,7 +1,11 @@
 #!/bin/bash
 
-source settings
+if ! [[ $(test -f "settings") ]]; then
+    echo "Settings are not set. Starting ./init"
+    source init
+fi
 source functions
+source settings
 
 clear
 
@@ -50,16 +54,16 @@ elif [ -z "$PR_PATH" ]; then
 	exit 1
 fi
 
-printf "\n${BOLD}Pool month:${DEF} $POOL_MONTH\n${BOLD}Pool year:${DEF} $POOL_YEAR\n\n"
+printf "\n${BOLD}Pool month:${GREEN} $POOL_MONTH\n$DEF${BOLD}Pool year:${GREEN} $POOL_YEAR$DEF\n\n"
 
 # --------------------------------------- Refresh the ranks or not --------------------------------------- #
 if [ ! -e "$PR_PATH/users" ] || [ ! -s "$PR_PATH/users" ]; then
 	REFRESH=1
 else
-	printf "${BOLD}${GRAY}$(tail -n 1 $PR_PATH/users)\n\n${DEF}"
+	printf "${BOLD}${DEF}$(tail -n 1 $PR_PATH/users)\n\n${DEF}"
 	while : ; do
-		printf "${GRAY}"
-		read -p "Do you want to refresh ? (Y/n): " REFRESH
+		printf "${GRAY}Do you want to refresh ? (Y/n):$DEF "
+		read -p "" REFRESH
 		printf "${DEF}"
 		case $REFRESH in
 			[Yy]*)
@@ -69,7 +73,7 @@ else
 				REFRESH=0
 				break;;
 			*)
-				echo "Please answer yes (y) or no (n)."
+				printf "${BOLD}${RED}Please answer yes (y) or no (n).$DEF\n"
 				;;
 		esac
 	done
@@ -87,20 +91,25 @@ if [ "$REFRESH" -eq 1 ]; then
 		printf "${BOLD}${RED}Error: Failed to fetch students' data\n${DEF}"
 		exit 1
 	fi
-	echo "Last updated date: $(date +%Y/%m/%d-%H:%M:%S)" >> $PR_PATH/users
+	printf "Last updated date: $(date +%Y/%m/%d-%H:%M:%S)" >> $PR_PATH/users
 	printf "\n"
 fi
 
 # --------------------------------------------- PRINT RANKS ---------------------------------------------- #
 printf "${GRAY}"
-read -p "Choose login to highlight (can be blank): " LOGIN
+printf "Choose login to highlight (default: $BOLD$GREEN$LOGIN$GRAY):$DEF "
+read -p "" LOGIN_INPUT
 printf "${DEF}\n"
+
+if [ -z "$LOGIN_INPUT" ]; then
+	LOGIN_INPUT=$LOGIN
+fi
 printf "${BOLD}${RED}RANK  LOGIN      LVL\n${DEF}"
 
 # Read from the file, sort in reverse by the second field (level), and format the output
 RANK_USERS=$(sed '$d' $PR_PATH/users | sort -t: -k2 -nr)
 echo "$RANK_USERS" | awk -F": " -v bold="$BOLD" -v def="$DEF" -v green="$GREEN" -v yellow="$YELLOW" \
-	-v gray="$GRAY" -v login="$LOGIN"\
+	-v gray="$GRAY" -v login="$LOGIN_INPUT"\
 	'BEGIN {rank=1} {
 		if ($1 == login) {
 			printf bold green "%-5s " green "%-10s " yellow "%0.4s\n" def, rank++, $1, $2
