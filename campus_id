@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source ./settings
+source settings
 
 # ---------------------------------------- Obtain an access token ---------------------------------------- #
 RESPONSE=$(curl -s --request POST \

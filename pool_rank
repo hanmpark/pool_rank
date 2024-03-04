@@ -1,10 +1,10 @@
 #!/bin/bash
 if ! test -f settings; then
     echo "Settings are not set. Starting ./init"
-    source ./init
+    source init
 fi
-source ./functions
-source ./settings
+source functions
+source settings
 
 clear
 
