@@ -22,19 +22,20 @@ Make sure both tools are installed on your system. You can install them using yo
 
 1. Clone the repository to your machine.
 2. Ensure you have a valid UID and SECRET for accessing the 42 API token, necessary for authenticated requests.
-3. Configure the `settings` file with the necessary variables.
+3. Execute `pool_rank`
 
 ## Configuration
 
-Set the following environment variables in your `settings` file to prepare the script for execution:
+After executing pool_rank, you will have a new file called `settings` in the root with the following variables. You could still modify them:
 ```bash
 # ESSENTIAL VARIABLES
 UID_42="" # your application's UID
 SECRET_42="" # your application's SECRET
-CAMPUS_ID="" # execute ./campus_id YOUR_CAMPUS_CITY if you don't know your campus id
+CAMPUS_ID="" # your campus id
 POOL_MONTH="" # Format eg: "february"
 POOL_YEAR="" # Format: "yyyy"
 PR_PATH="" # for storing a "users" file listing found users in the project directory
+LOGIN="" # 42 student login
 ```
 
 ## Execution
