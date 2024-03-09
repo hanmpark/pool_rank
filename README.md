@@ -42,5 +42,5 @@ LOGIN="" # 42 student login
 
 To run the script, use the following command:
 ```bash
-./pool_ranking
+pool_rank
 ```
