@@ -5,7 +5,7 @@ if ! test -f settings_pool_rank; then
 	init_pool_rank
 fi
 
-source functions
+source functions_pool_rank
 source settings_pool_rank
 
 clear

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source functions
+source functions_pool_rank
 
 printf "$BOLD$PURPLE
                      .__                          __    
