@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source ./utils/functions
+source functions
 
 printf "$BOLD$PURPLE
                      .__                          __    
@@ -76,4 +76,4 @@ POOL_YEAR=$POOL_YEAR
 POOL_MONTH=$POOL_MONTH
 PR_PATH=\"$PR_PATH\"
 LOGIN=\"$LOGIN\"
-" > settings
+" > settings_pool_rank

@@ -26,7 +26,7 @@ Make sure both tools are installed on your system. You can install them using yo
 
 ## Configuration
 
-After executing pool_rank, you will have a new file called `settings` in the root with the following variables. You could still modify them:
+After executing pool_rank, you will have a new file called `settings_pool_rank` in the root with the following variables. You could still modify them:
 ```bash
 # ESSENTIAL VARIABLES
 UID_42="" # your application's UID

@@ -1,12 +1,12 @@
 #!/bin/bash
 
-if ! test -f settings; then
-    echo "Settings are not set. Starting ./init"
-    ./init
+if ! test -f settings_pool_rank; then
+	echo "settings_pool_rank are not set. Starting ./init_pool_rank"
+	init_pool_rank
 fi
 
-source ./utils/functions
-source ./settings
+source functions
+source settings_pool_rank
 
 clear
 
