@@ -1,14 +1,17 @@
 #!/bin/bash
 
-if ! test -f settings_pool_rank; then
+clear
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
+
+if ! test -f "$SCRIPT_DIR/settings_pool_rank"; then
 	echo "settings_pool_rank are not set. Starting ./init_pool_rank"
-	init_pool_rank
+	$SCRIPT_DIR/init_pool_rank
 fi
 
-source functions_pool_rank
-source settings_pool_rank
+source $SCRIPT_DIR/functions_pool_rank
+source $SCRIPT_DIR/settings_pool_rank
 
-clear
 
 printf "$BOLD$PURPLE
                      .__                          __    
@@ -50,18 +53,15 @@ elif [ -z "$POOL_MONTH" ]; then
 elif [ -z "$POOL_YEAR" ]; then
 	printf "${BOLD}${RED}Error: Please set a pool year\n${DEF}"
 	exit 1
-elif [ -z "$PR_PATH" ]; then
-	printf "${BOLD}${RED}Error: Please set the pool_rank path\n${DEF}"
-	exit 1
 fi
 
 printf "\n${BOLD}Pool month:${GREEN} $POOL_MONTH\n$DEF${BOLD}Pool year:${GREEN} $POOL_YEAR$DEF\n\n"
 
 # --------------------------------------- Refresh the ranks or not --------------------------------------- #
-if [ ! -e "$PR_PATH/users" ] || [ ! -s "$PR_PATH/users" ]; then
+if [ ! -e "$SCRIPT_DIR/users" ] || [ ! -s "$SCRIPT_DIR/users" ]; then
 	REFRESH=1
 else
-	printf "${BOLD}${DEF}$(tail -n 1 $PR_PATH/users)\n\n${DEF}"
+	printf "${BOLD}${DEF}$(tail -n 1 $SCRIPT_DIR/users)\n\n${DEF}"
 	while : ; do
 		printf "${GRAY}Do you want to refresh ? (Y/n):$DEF "
 		read -p "" REFRESH
@@ -81,7 +81,7 @@ else
 fi
 
 if [ "$REFRESH" -eq 1 ]; then
-	echo -n "" > $PR_PATH/users
+	echo -n "" > $SCRIPT_DIR/users
 	ALL_PAGE_USERS=$(fetch_users_by_pool "$POOL_MONTH" "$POOL_YEAR")
 	if [ $? -ne 0 ]; then
 		printf "${BOLD}${RED}Error: No students found for the specified pool month/year.\n${DEF}"
@@ -92,7 +92,7 @@ if [ "$REFRESH" -eq 1 ]; then
 		printf "${BOLD}${RED}Error: Failed to fetch students' data\n${DEF}"
 		exit 1
 	fi
-	printf "Last updated date: $(date +%Y/%m/%d-%H:%M:%S)" >> $PR_PATH/users
+	printf "Last updated date: $(date +%Y/%m/%d-%H:%M:%S)" >> $SCRIPT_DIR/users
 	printf "\n"
 fi
 
@@ -108,7 +108,7 @@ fi
 printf "${BOLD}${RED}RANK  LOGIN      LVL\n${DEF}"
 
 # Read from the file, sort in reverse by the second field (level), and format the output
-RANK_USERS=$(sed '$d' $PR_PATH/users | sort -t: -k2 -nr)
+RANK_USERS=$(sed '$d' $SCRIPT_DIR/users | sort -t: -k2 -nr)
 echo "$RANK_USERS" | awk -F": " -v bold="$BOLD" -v def="$DEF" -v green="$GREEN" -v yellow="$YELLOW" \
 	-v gray="$GRAY" -v login="$LOGIN_INPUT"\
 	'BEGIN {rank=1} {

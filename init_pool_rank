@@ -1,6 +1,8 @@
 #!/bin/bash
 
-source functions_pool_rank
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
+
+source $SCRIPT_DIR/functions_pool_rank
 
 printf "$BOLD$PURPLE
                      .__                          __    
@@ -60,8 +62,8 @@ while : ; do
 		break;
 	fi
 done
+
 printf "\n"
-PR_PATH=$(pwd)
 POOL_YEAR=$(echo $USER_DATA | jq ".pool_year")
 POOL_MONTH=$(echo $USER_DATA  | jq ".pool_month")
 CAMPUS_ID=$(echo $USER_DATA | jq ".campus[].id")
@@ -74,6 +76,5 @@ SECRET_42=\"$SECRET_42\"
 CAMPUS_ID=\"$CAMPUS_ID\"
 POOL_YEAR=$POOL_YEAR
 POOL_MONTH=$POOL_MONTH
-PR_PATH=\"$PR_PATH\"
 LOGIN=\"$LOGIN\"
-" > settings_pool_rank
+" > $SCRIPT_DIR/settings_pool_rank
