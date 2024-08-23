@@ -67,6 +67,7 @@ printf "\n"
 POOL_YEAR=$(echo $USER_DATA | jq ".pool_year")
 POOL_MONTH=$(echo $USER_DATA  | jq ".pool_month")
 CAMPUS_ID=$(echo $USER_DATA | jq ".campus[].id")
+PR_PATH=$(pwd)
 
 printf "
 # VARIABLES
@@ -77,4 +78,5 @@ CAMPUS_ID=\"$CAMPUS_ID\"
 POOL_YEAR=$POOL_YEAR
 POOL_MONTH=$POOL_MONTH
 LOGIN=\"$LOGIN\"
+PR_PATH=\"$PR_PATH\"
 " > $SCRIPT_DIR/settings_pool_rank
