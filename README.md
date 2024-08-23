@@ -22,7 +22,8 @@ Make sure both tools are installed on your system. You can install them using yo
 
 1. Clone the repository to your machine.
 2. Ensure you have a valid UID and SECRET for accessing the 42 API token, necessary for authenticated requests.
-3. Execute `pool_rank`
+3. Execute `init_pool_rank`
+4. Execute `pool_rank`
 
 ## Configuration
 
