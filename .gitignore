@@ -1,2 +1,7 @@
-settings_pool_rank
+node_modules/
+package-lock.json
+.DS_Store
+.vscode/
+*.swp
+settings_pool_rank.json
 users
