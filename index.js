@@ -20,7 +20,7 @@ const DEF = chalk.reset;
 
 // Obtain script directory
 const SCRIPT_DIR = __dirname;
-const SETTINGS_FILE = path.join(SCRIPT_DIR, 'settings_pool_rank');
+const SETTINGS_FILE = path.join(SCRIPT_DIR, 'settings_pool_rank.json');
 
 // Function to fetch users by pool
 const fetchUsersByPool = async (poolMonth, poolYear, campusId, accessToken) => {
