@@ -155,7 +155,7 @@ const main = async () => {
 	} else {
 		console.log(`Last updated date: ${BOLD(DEF(fs.statSync(usersFilePath).mtime.toISOString().replace('T', ' ').substring(0, 19)))}\n`);
 
-		const answer = readlineSync.question(`${GRAY('Do you want to refresh ? (Y/n): ')}`);
+		const answer = readlineSync.question(`${GRAY('Do you want to refresh ? (y/N): ')}`);
 		if (answer.toLowerCase() === 'y') refresh = 1;
 	}
 
